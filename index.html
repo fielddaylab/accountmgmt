@@ -8,6 +8,7 @@ body,div,span
   padding:0px;
   color:blue;
   font:16px Open Sans;
+  letter-spacing:1px;
 }
 img
 {
@@ -66,21 +67,25 @@ td
   margin:0px auto;
   width:50%;
   padding:8px;
-  border:2px solid blue;
+  border:3px solid blue;
   border-radius:20px;
   text-align:center;
 }
-#alert
+#alert_container
 {
   display:none;
+  width:100%;
+  position:fixed;
+  top:200px;
+}
+#alert
+{
   width:200px;
   padding:20px;
   background-color:white;
   border:2px solid blue;
   border-radius:20px;
   margin:0px auto;
-  position:absolute;
-  top:50px;
 }
 #alert_txt
 {
@@ -134,15 +139,15 @@ function displaySection(section)
 function displayAlert(txt)
 {
   document.getElementById("alert_txt").innerHTML = txt;
-  document.getElementById("alert").style.display = "block";
+  document.getElementById("alert_container").style.display = "block";
 }
 function dismissAlert()
 {
   document.getElementById("alert_txt").innerHTML = "";
-  document.getElementById("alert").style.display = "none";
+  document.getElementById("alert_container").style.display = "none";
 }
 
-function parseURLParams(url) 
+function parseURLParams(url)
 {
   var queryStart = url.indexOf("?") + 1;
   var queryEnd   = url.indexOf("#") + 1 || url.length + 1;
@@ -311,7 +316,7 @@ function submitReset()
     <div id="brand">
       <img src="assets/arrow.png" style="margin:0px auto; width:10%;"></img>
       <div class="spacer" style="height:20px;"></div>
-      <img src="assets/logo.png" style="margin:0px auto; width:80%;"></img>
+      <img src="assets/logo.png" style="margin:0px auto; width:60%;"></img>
     </div>
 
     <div class="spacer" style="height:30px;"></div>
@@ -375,10 +380,12 @@ function submitReset()
 
 </div>
 
-<div id="alert" onclick='dismissAlert()'>
-  <div id="alert_txt"></div>
-  <div class="spacer" style="height:10px;"></div>
-  <div id="alert_dismiss">(Click to dismiss)</div>
+<div id="alert_container">
+  <div id="alert" onclick='dismissAlert()'>
+    <div id="alert_txt"></div>
+    <div class="spacer" style="height:10px;"></div>
+    <div id="alert_dismiss">(Click to dismiss)</div>
+  </div>
 </div>
 
 </body>
