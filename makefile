@@ -1,0 +1,5 @@
+
+make:
+	open index.html
+
+

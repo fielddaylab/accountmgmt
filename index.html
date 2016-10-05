@@ -1,0 +1,223 @@
+<html>
+<head>
+<style>
+body,div,span
+{
+  margin:0px;
+  padding:0px;
+}
+img
+{
+  display:block;
+}
+body
+{
+  background-color:black;
+}
+.spacer
+{
+
+}
+#middle_bar
+{
+  margin:0px auto;
+  width:400px;
+  height:100%;
+  background-color:white;
+}
+#content
+{
+
+}
+#brand
+{
+
+}
+#tabs
+{
+}
+.tab
+{
+  float:left;
+}
+#sections
+{
+  clear:both;
+  width:100%;
+}
+.section
+{
+  display:none;
+}
+</style>
+<script type="text/javascript">
+    function load()
+    {
+        var params = parseURLParams(document.URL);
+        if(params.username && params.password)
+        {
+            document.getElementById('auth_request_user').value = params.username;
+            document.getElementById('auth_request_password').value = params.password;
+            submitAuth();
+        }
+    }
+
+    function displaySection(section)
+    {
+      document.getElementById("auth_tab").style.backgroundColor   = "white";
+      document.getElementById("create_tab").style.backgroundColor = "white";
+      document.getElementById("forgot_tab").style.backgroundColor = "white";
+      document.getElementById(section+"_tab").style.backgroundColor = "blue";
+
+      document.getElementById("auth_section").style.display   = "none";
+      document.getElementById("create_section").style.display = "none";
+      document.getElementById("forgot_section").style.display = "none";
+      document.getElementById(section+"_section").style.display = "block";
+    }
+
+    function parseURLParams(url) 
+    {
+        var queryStart = url.indexOf("?") + 1;
+        var queryEnd   = url.indexOf("#") + 1 || url.length + 1;
+        var query      = url.slice(queryStart, queryEnd - 1);
+
+        var params  = {};
+        if (query === url || query === "") return params;
+        var nvPairs = query.replace(/\+/g, " ").split("&");
+
+        for(var i=0; i<nvPairs.length; i++)
+        {
+            var nv = nvPairs[i].split("=");
+            var n  = decodeURIComponent(nv[0]);
+            var v  = decodeURIComponent(nv[1]);
+            if(!(n in params)) params[n] = [];
+            params[n].push(nv.length === 2 ? v : null);
+        }
+        return params;
+    }
+
+    function sendRequest(fn, params, method)
+    {
+        var xmlhttp;
+        xmlhttp=new XMLHttpRequest();
+        xmlhttp.open(method,"../../../json.php/v2."+fn,false);
+        xmlhttp.setRequestHeader("Content-type", "application/json");
+        xmlhttp.send(params); //Synchronous call
+
+        return JSON.parse(xmlhttp.responseText);
+    }
+
+    var userId = 0;
+    var rwkey = "";
+    function submitAuth()
+    {
+        var package = {"user_name":document.getElementById('auth_request_user').value,"password":document.getElementById('auth_request_password').value,"permission":"read_write"};
+        var response = sendRequest('users.logIn', JSON.stringify(package), "POST");
+        userId = response.data.user_id; document.getElementById('auth_response_user_id').innerHTML = response.data.user_id;
+        rwkey = response.data.read_write_key; document.getElementById('auth_response_read_write_key').innerHTML = response.data.read_write_key;
+    }
+    function submitCreate()
+    {
+        var package = {"user_name":document.getElementById('new_user_request_user').value,"password":document.getElementById('new_user_request_password').value};
+        var response = sendRequest('users.createUser', JSON.stringify(package), "POST");
+        document.getElementById('auth_request_user').value = document.getElementById('new_user_request_user').value;
+        document.getElementById('auth_request_password').value = document.getElementById('new_user_request_password').value;
+        userId = response.data.user_id; document.getElementById('auth_response_user_id').innerHTML = response.data.user_id;
+        rwkey = response.data.read_write_key; document.getElementById('auth_response_read_write_key').innerHTML = response.data.read_write_key;
+    }
+
+    function submitCustom()
+    {
+        var package = JSON.parse(document.getElementById('custom_request').value);
+        package.auth = {"user_id":userId,"key":rwkey};
+        var response = sendRequest(document.getElementById('custom_request_method').value, JSON.stringify(package), "POST");
+    }
+
+
+/* NEEDS INTEGRATION
+function submitFix()
+{
+  var p = parseURLParams(window.location.href);
+  var p1 = document.getElementById('p1').value;
+  var p2 = document.getElementById('p2').value;
+  if(p1 != p2) {
+    errorAlert("Passwords do not match.");
+    return;
+  }
+
+  if(p1 === "") {
+    warningAlert("Password can't be blank.");
+    return;
+  }
+
+  var response = sendRequest('v2.users.fixPassword', {"user_id":p.i[0],"junk":p.j[0],"new_password":p1}, "POST");
+  console.log(response);
+  document.getElementById("content-area").innerHTML = "<h4>Your password was reset! Close this window and head back to ARIS to log in.</h4>";
+}
+
+function errorAlert(message) {
+  document.getElementById('alert-box').innerHTML = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-remove'></span> "+message+"</div>"
+}
+
+function warningAlert(message) {
+  document.getElementById('alert-box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='glyphicon glyphicon-question-sign'></span> "+message+"</div>"
+}
+*/
+</script>
+</head>
+<body onload="load()">
+
+<div id="middle_bar">
+
+  <div class="spacer" style="height:10%;"></div>
+  <div id="content">
+
+    <div id="brand">
+      <img src="assets/arrow.png" style="margin:0px auto; width:10%;"></img>
+      <div class="spacer" style="height:20px;"></div>
+      <img src="assets/logo.png" style="margin:0px auto; width:80%;"></img>
+    </div>
+
+    <div class="spacer" style="height:30px;"></div>
+
+    <div id="tabs">
+      <div class="tab" id="auth_tab"   onclick='displaySection("auth")'  > Confirm Account </div>
+      <div class="tab" id="create_tab" onclick='displaySection("create")'> Create Account  </div>
+      <div class="tab" id="forgot_tab" onclick='displaySection("forgot")'> Forgot Password?</div>
+    </div>
+
+    <div id="sections">
+
+      <div class="section" id="auth_section">
+          <table id="auth_inputs">
+            <tr> <td> <button id='auth_request_submit' onclick='submitAuth()'>authenticate</button> </td> </tr>
+            <tr> <td style='text-align:right;'>Username:</td> <td><input id='auth_request_user'     type='text'>    </input></td>  </tr>
+            <tr> <td style='text-align:right;'>Password:</td> <td><input id='auth_request_password' type='password'></input></td>  </tr>
+          </table>
+      </div>
+
+      <div class="section" id="create_section">
+          <table id="create_inputs">
+            <tr> <td> <button id='create_request_submit' onclick='submitCreate()'>create new user</button> </td> </tr>
+            <tr> <td style='text-align:right;'>Username:</td> <td><input id='create_request_user'     type='text'>    </input></td>  </tr>
+            <tr> <td style='text-align:right;'>Password:</td> <td><input id='create_request_password' type='password'></input></td>  </tr>
+          </table>
+      </div>
+
+      <div class="section" id="forgot_section">
+          <table id="forgot_inputs">
+            <tr> <td> <button id='forgot_request_submit' onclick='submitForgot()'>forgot</button> </td> </tr>
+            <tr> <td style='text-align:right;'>Username:</td> <td><input id='forgot_request_user'     type='text'>    </input></td> </tr>
+            <tr> <td style='text-align:right;'>Password:</td> <td><input id='forgot_request_password' type='password'></input></td> </tr>
+          </table>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
+
