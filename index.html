@@ -15,7 +15,7 @@ img
 }
 body
 {
-  background-color:black;
+  background-color:#444444;
 }
 td
 {
@@ -114,16 +114,20 @@ function displaySection(section)
   document.getElementById("create_tab").style.borderTop     = "2px solid white";
   document.getElementById("create_tab").style.borderLeft    = "2px solid white";
   document.getElementById("create_tab").style.borderRight   = "2px solid white";
-  document.getElementById("forgot_tab").style.borderTop     = "2px solid white";
-  document.getElementById("forgot_tab").style.borderLeft    = "2px solid white";
-  document.getElementById("forgot_tab").style.borderRight   = "2px solid white";
+  document.getElementById("change_tab").style.borderTop     = "2px solid white";
+  document.getElementById("change_tab").style.borderLeft    = "2px solid white";
+  document.getElementById("change_tab").style.borderRight   = "2px solid white";
+  document.getElementById("reset_tab").style.borderTop      = "2px solid white";
+  document.getElementById("reset_tab").style.borderLeft     = "2px solid white";
+  document.getElementById("reset_tab").style.borderRight    = "2px solid white";
   document.getElementById(section+"_tab").style.borderTop   = "2px solid blue";
   document.getElementById(section+"_tab").style.borderLeft  = "2px solid blue";
   document.getElementById(section+"_tab").style.borderRight = "2px solid blue";
 
   document.getElementById("auth_section").style.display     = "none";
   document.getElementById("create_section").style.display   = "none";
-  document.getElementById("forgot_section").style.display   = "none";
+  document.getElementById("change_section").style.display   = "none";
+  document.getElementById("reset_section").style.display    = "none";
   document.getElementById(section+"_section").style.display = "block";
 }
 
@@ -170,8 +174,6 @@ function sendRequest(fn, params, method)
   return JSON.parse(xmlhttp.responseText);
 }
 
-var userId = 0;
-var rwkey = "";
 function submitAuth()
 {
   var username = document.getElementById('auth_request_user').value;
@@ -190,6 +192,7 @@ function submitAuth()
   if(response.returnCode) displayAlert("Either the user does not exist, or you have entered the wrong password.");
   else                    displayAlert("User account "+username+" confirmed!");
 }
+
 function submitCreate()
 {
   var username         = document.getElementById('create_request_user').value;
@@ -213,10 +216,36 @@ function submitCreate()
   else                    displayAlert("User account "+username+" created!");
 }
 
-function submitForgot()
+function submitChange()
 {
-  var username = document.getElementById('forgot_request_user').value;
-  var email    = document.getElementById('forgot_request_email').value;
+  var username             = document.getElementById('change_request_user').value;
+  var password             = document.getElementById('change_request_password_old').value;
+  var password_new         = document.getElementById('change_request_password_new').value;
+  var password_new_confirm = document.getElementById('change_request_password_new_confirm').value;
+
+  if(username.length < 3)
+  { displayAlert("Please enter a username with at least 5 characters."); return; }
+  if(!username.match(/^[A-Za-z0-9_]*$/))
+  { displayAlert("Please enter a username using only letters, numbers, or _."); return; }
+  if(password.length < 3)
+  { displayAlert("Please enter a valid password."); return; }
+
+  if(password_new.length < 3)
+  { displayAlert("Please enter a valid password."); return; }
+  if(password_new != password_new_confirm)
+  { displayAlert("Passwords don't match."); return; }
+
+  var package = {"user_name":username,"old_password":password,"new_password":password_new};
+  var response = sendRequest('users.changePassword', JSON.stringify(package), "POST");
+  console.log(response);
+  if(response.returnCode) displayAlert("Something went wrong: "+response.returnCodeDescription);
+  else                    displayAlert("Password successfully changed!");
+}
+
+function submitReset()
+{
+  var username = document.getElementById('reset_request_user').value;
+  var email    = document.getElementById('reset_request_email').value;
 
   var username_valid = false;
   var email_valid = false;
@@ -233,7 +262,7 @@ function submitForgot()
 
   var package;
   if(username_valid) package = {"user_name":username};
-  if(email_valid)    package = {"email":email};
+  if(email_valid)    package = {"user_name":"","email":email};
   var response = sendRequest('users.requestForgotPasswordEmail', JSON.stringify(package), "POST");
   console.log(response);
   if(response.returnCode) displayAlert("Something went wrong: "+response.returnCodeDescription);
@@ -290,10 +319,11 @@ function submitForgot()
     <div id="tabs">
       <div class="tab" id="auth_tab"   onclick='displaySection("auth")'  > Confirm Account </div>
       <div class="tab" id="create_tab" onclick='displaySection("create")'> Create Account  </div>
-      <div class="tab" id="forgot_tab" onclick='displaySection("forgot")'> Forgot Password?</div>
+      <div class="tab" id="change_tab" onclick='displaySection("change")'> Change Password </div>
+      <div class="tab" id="reset_tab"  onclick='displaySection("reset")' > Forgot Password?</div>
     </div>
 
-    <div class="spacer" style="height:30px;"></div>
+    <div class="spacer" style="height:70px;"></div>
 
     <div id="sections">
 
@@ -317,14 +347,26 @@ function submitForgot()
           <div class="button" id="create_request_submit" onclick='submitCreate()'>CREATE ACCOUNT</div>
       </div>
 
-      <div class="section" id="forgot_section">
-          <table id="forgot_inputs">
-            <tr> <td>Username:</td> <td><input id="forgot_request_user"  type='text'></input></td> </tr>
-            <tr> <td> or      </td> <td>                                                     </td> </tr>
-            <tr> <td>Email:   </td> <td><input id="forgot_request_email" type='text'></input></td> </tr>
+      <div class="section" id="change_section">
+          <table id="change_inputs">
+            <tr> <td>Username:          </td> <td><input id="change_request_user"                 type='text'>    </input></td> </tr>
+            <tr> <td>Password (Old):    </td> <td><input id="change_request_password_old"         type='password'></input></td> </tr>
+            <tr> <td> -                 </td> <td>                                                                        </td> </tr>
+            <tr> <td>Password (New):    </td> <td><input id="change_request_password_new"         type='password'></input></td> </tr>
+            <tr> <td>Password (Confirm):</td> <td><input id="change_request_password_new_confirm" type='password'></input></td> </tr>
           </table>
           <div class="spacer" style="height:30px;"></div>
-          <div class="button" id="forgot_request_submit" onclick='submitForgot()'>SEND EMAIL</div>
+          <div class="button" id="change_request_submit" onclick='submitChange()'>CHANGE PASSWORD</div>
+      </div>
+
+      <div class="section" id="reset_section">
+          <table id="reset_inputs">
+            <tr> <td>Username:</td> <td><input id="reset_request_user"  type='text'></input></td> </tr>
+            <tr> <td> or      </td> <td>                                                     </td> </tr>
+            <tr> <td>Email:   </td> <td><input id="reset_request_email" type='text'></input></td> </tr>
+          </table>
+          <div class="spacer" style="height:30px;"></div>
+          <div class="button" id="reset_request_submit" onclick='submitReset()'>SEND EMAIL</div>
       </div>
 
     </div>
