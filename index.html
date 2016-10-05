@@ -70,7 +70,29 @@ td
   border-radius:20px;
   text-align:center;
 }
+#alert
+{
+  display:none;
+  width:200px;
+  padding:20px;
+  background-color:white;
+  border:2px solid blue;
+  border-radius:20px;
+  margin:0px auto;
+  position:absolute;
+  top:50px;
+}
+#alert_txt
+{
+
+}
+#alert_dismiss
+{
+  text-align:center;
+}
+
 </style>
+
 <script type="text/javascript">
 function load()
 {
@@ -99,10 +121,21 @@ function displaySection(section)
   document.getElementById(section+"_tab").style.borderLeft  = "2px solid blue";
   document.getElementById(section+"_tab").style.borderRight = "2px solid blue";
 
-  document.getElementById("auth_section").style.display   = "none";
-  document.getElementById("create_section").style.display = "none";
-  document.getElementById("forgot_section").style.display = "none";
+  document.getElementById("auth_section").style.display     = "none";
+  document.getElementById("create_section").style.display   = "none";
+  document.getElementById("forgot_section").style.display   = "none";
   document.getElementById(section+"_section").style.display = "block";
+}
+
+function displayAlert(txt)
+{
+  document.getElementById("alert_txt").innerHTML = txt;
+  document.getElementById("alert").style.display = "block";
+}
+function dismissAlert()
+{
+  document.getElementById("alert_txt").innerHTML = "";
+  document.getElementById("alert").style.display = "none";
 }
 
 function parseURLParams(url) 
@@ -130,7 +163,7 @@ function sendRequest(fn, params, method)
 {
   var xmlhttp;
   xmlhttp=new XMLHttpRequest();
-  xmlhttp.open(method,"../../../json.php/v2."+fn,false);
+  xmlhttp.open(method,"http://www.arisgames.org/server/json.php/v2."+fn,false);
   xmlhttp.setRequestHeader("Content-type", "application/json");
   xmlhttp.send(params); //Synchronous call
 
@@ -141,26 +174,70 @@ var userId = 0;
 var rwkey = "";
 function submitAuth()
 {
-  var package = {"user_name":document.getElementById('auth_request_user').value,"password":document.getElementById('auth_request_password').value,"permission":"read_write"};
+  var username = document.getElementById('auth_request_user').value;
+  var password = document.getElementById('auth_request_password').value;
+
+  if(username.length < 3)
+  { displayAlert("Please enter a username with at least 5 characters."); return; }
+  if(!username.match(/^[A-Za-z0-9_]*$/))
+  { displayAlert("Please enter a username using only letters, numbers, or _."); return; }
+  if(password.length < 3)
+  { displayAlert("Please enter a valid password."); return; }
+
+  var package = {"user_name":username,"password":password,"permission":"read_write"};
   var response = sendRequest('users.logIn', JSON.stringify(package), "POST");
-  userId = response.data.user_id; document.getElementById('auth_response_user_id').innerHTML = response.data.user_id;
-  rwkey = response.data.read_write_key; document.getElementById('auth_response_read_write_key').innerHTML = response.data.read_write_key;
+  console.log(response);
+  if(response.returnCode) displayAlert("Either the user does not exist, or you have entered the wrong password.");
+  else                    displayAlert("User account "+username+" confirmed!");
 }
 function submitCreate()
 {
-  var package = {"user_name":document.getElementById('new_user_request_user').value,"password":document.getElementById('new_user_request_password').value};
+  var username         = document.getElementById('create_request_user').value;
+  var password         = document.getElementById('create_request_password').value;
+  var password_confirm = document.getElementById('create_request_password_confirm').value;
+  var email            = document.getElementById('create_request_email').value;
+
+  if(username.length < 3)
+  { displayAlert("Please enter a username with at least 5 characters."); return; }
+  if(!username.match(/^[A-Za-z0-9_]*$/))
+  { displayAlert("Please enter a username using only letters, numbers, or _."); return; }
+  if(password.length < 3)
+  { displayAlert("Please enter a valid password."); return; }
+  if(password != password_confirm)
+  { displayAlert("Passwords don't match."); return; }
+
+  var package = {"user_name":username,"password":password,"email":email};
   var response = sendRequest('users.createUser', JSON.stringify(package), "POST");
-  document.getElementById('auth_request_user').value = document.getElementById('new_user_request_user').value;
-  document.getElementById('auth_request_password').value = document.getElementById('new_user_request_password').value;
-  userId = response.data.user_id; document.getElementById('auth_response_user_id').innerHTML = response.data.user_id;
-  rwkey = response.data.read_write_key; document.getElementById('auth_response_read_write_key').innerHTML = response.data.read_write_key;
+  console.log(response);
+  if(response.returnCode) displayAlert("Something went wrong: "+response.returnCodeDescription);
+  else                    displayAlert("User account "+username+" created!");
 }
 
-function submitCustom()
+function submitForgot()
 {
-  var package = JSON.parse(document.getElementById('custom_request').value);
-  package.auth = {"user_id":userId,"key":rwkey};
-  var response = sendRequest(document.getElementById('custom_request_method').value, JSON.stringify(package), "POST");
+  var username = document.getElementById('forgot_request_user').value;
+  var email    = document.getElementById('forgot_request_email').value;
+
+  var username_valid = false;
+  var email_valid = false;
+
+  if(username.length > 3 && username.match(/^[A-Za-z0-9_]*$/)           ) username_valid = true;
+  if(email.length    > 3 && email.match(/^[A-Za-z0-9_]*@[A-Za-z0-9_]*$/)) email_valid    = true; //incredibly basic email verification
+
+  if(username.length > 0 && !username_valid)
+  { displayAlert("Enter a valid username."); return; }
+  if(email.length > 0 && !email_valid)
+  { displayAlert("Enter a valid email."); return; }
+  if(!username_valid && !email_valid)
+  { displayAlert("Enter a valid username or email."); return; }
+
+  var package;
+  if(username_valid) package = {"user_name":username};
+  if(email_valid)    package = {"email":email};
+  var response = sendRequest('users.requestForgotPasswordEmail', JSON.stringify(package), "POST");
+  console.log(response);
+  if(response.returnCode) displayAlert("Something went wrong: "+response.returnCodeDescription);
+  else                    displayAlert("If an account exists with these credentials, an email has been sent to its corresponding address with the next steps.");
 }
 
 
@@ -222,35 +299,44 @@ function submitCustom()
 
       <div class="section" id="auth_section">
           <table id="auth_inputs">
-            <tr> <td>Username:</td> <td><input id='auth_request_user'     type='text'>    </input></td>  </tr>
-            <tr> <td>Password:</td> <td><input id='auth_request_password' type='password'></input></td>  </tr>
+            <tr> <td>Username:</td> <td><input id="auth_request_user"     type='text'>    </input></td>  </tr>
+            <tr> <td>Password:</td> <td><input id="auth_request_password" type='password'></input></td>  </tr>
           </table>
           <div class="spacer" style="height:30px;"></div>
-          <div class="button" id='auth_request_submit' onclick='submitAuth()'>SIGN IN</div>
+          <div class="button" id="auth_request_submit" onclick='submitAuth()'>SIGN IN</div>
       </div>
 
       <div class="section" id="create_section">
           <table id="create_inputs">
-            <tr> <td>Username:</td> <td><input id='create_request_user'     type='text'>    </input></td>  </tr>
-            <tr> <td>Password:</td> <td><input id='create_request_password' type='password'></input></td>  </tr>
+            <tr> <td>Username:          </td> <td><input id="create_request_user"             type='text'>    </input></td>  </tr>
+            <tr> <td>Password:          </td> <td><input id="create_request_password"         type='password'></input></td>  </tr>
+            <tr> <td>Password (Confirm):</td> <td><input id="create_request_password_confirm" type='password'></input></td>  </tr>
+            <tr> <td>Email (Optional):  </td> <td><input id="create_request_email"            type='text'>    </input></td>  </tr>
           </table>
           <div class="spacer" style="height:30px;"></div>
-          <div class="button" id='create_request_submit' onclick='submitCreate()'>CREATE ACCOUNT</div>
+          <div class="button" id="create_request_submit" onclick='submitCreate()'>CREATE ACCOUNT</div>
       </div>
 
       <div class="section" id="forgot_section">
           <table id="forgot_inputs">
-            <tr> <td>Username:</td> <td><input id='forgot_request_user'     type='text'>    </input></td> </tr>
-            <tr> <td>Password:</td> <td><input id='forgot_request_password' type='password'></input></td> </tr>
+            <tr> <td>Username:</td> <td><input id="forgot_request_user"  type='text'></input></td> </tr>
+            <tr> <td> or      </td> <td>                                                     </td> </tr>
+            <tr> <td>Email:   </td> <td><input id="forgot_request_email" type='text'></input></td> </tr>
           </table>
           <div class="spacer" style="height:30px;"></div>
-          <div class="button" id='forgot_request_submit' onclick='submitForgot()'>SEND EMAIL</div>
+          <div class="button" id="forgot_request_submit" onclick='submitForgot()'>SEND EMAIL</div>
       </div>
 
     </div>
 
   </div>
 
+</div>
+
+<div id="alert" onclick='dismissAlert()'>
+  <div id="alert_txt"></div>
+  <div class="spacer" style="height:10px;"></div>
+  <div id="alert_dismiss">(Click to dismiss)</div>
 </div>
 
 </body>
