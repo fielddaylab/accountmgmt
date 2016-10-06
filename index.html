@@ -6,7 +6,7 @@ body,div,span
 {
   margin:0px;
   padding:0px;
-  color:blue;
+  color:#444444;
   font:16px Open Sans;
   letter-spacing:1px;
 }
@@ -99,7 +99,7 @@ td
 <script type="text/javascript">
 function load()
 {
-  displaySection("auth");
+  displaySection("create");
   var params = parseURLParams(document.URL);
   if(params.username && params.password)
   {
@@ -314,7 +314,7 @@ function submitReset()
     <div class="spacer" style="height:30px;"></div>
 
     <div id="tabs">
-      <div class="tab" id="auth_tab"   onclick='displaySection("auth")'  > Confirm Account </div>
+      <div style="display:none;" class="tab" id="auth_tab"   onclick='displaySection("auth")'  > Confirm Account </div>
       <div class="tab" id="create_tab" onclick='displaySection("create")'> Create Account  </div>
       <div class="tab" id="change_tab" onclick='displaySection("change")'> Change Password </div>
       <div class="tab" id="reset_tab"  onclick='displaySection("reset")' > Forgot Password?</div>
