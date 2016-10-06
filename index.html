@@ -19,6 +19,12 @@ body
 {
   background-color:#444444;
 }
+input
+{
+  border:1px solid blue;
+  border-radius:20px;
+  padding:10px;
+}
 .spacer
 {
 
@@ -336,8 +342,8 @@ function submitReset()
 
       <div class="section" id="auth_section">
           <table class="inputs" id="auth_inputs">
-            <tr> <td class="ilabel">Username:</td> <td class="ibox"><input id="auth_request_user"     type='text'>    </input></td>  </tr>
-            <tr> <td class="ilabel">Password:</td> <td class="ibox"><input id="auth_request_password" type='password'></input></td>  </tr>
+            <tr> <td class="ilabel">Username:</td> <td class="ibox"><input id="auth_request_user"     type="text"     placeholder="Username"></input></td>  </tr>
+            <tr> <td class="ilabel">Password:</td> <td class="ibox"><input id="auth_request_password" type="password" placeholder="Password"></input></td>  </tr>
           </table>
           <div class="spacer" style="height:30px;"></div>
           <div class="button" id="auth_request_submit" onclick='submitAuth()'>SIGN IN</div>
@@ -345,10 +351,10 @@ function submitReset()
 
       <div class="section" id="create_section">
           <table class="inputs" id="create_inputs">
-            <tr> <td class="ilabel">Username:          </td> <td class="ibox"><input id="create_request_user"             type='text'>    </input></td>  </tr>
-            <tr> <td class="ilabel">Password:          </td> <td class="ibox"><input id="create_request_password"         type='password'></input></td>  </tr>
-            <tr> <td class="ilabel">Password (Confirm):</td> <td class="ibox"><input id="create_request_password_confirm" type='password'></input></td>  </tr>
-            <tr> <td class="ilabel">Email (Optional):  </td> <td class="ibox"><input id="create_request_email"            type='text'>    </input></td>  </tr>
+            <tr> <td class="ilabel">Username:          </td> <td class="ibox"><input id="create_request_user"             type="text"     placeholder="Username">          </input></td>  </tr>
+            <tr> <td class="ilabel">Password:          </td> <td class="ibox"><input id="create_request_password"         type="password" placeholder="Password">          </input></td>  </tr>
+            <tr> <td class="ilabel">Password (Confirm):</td> <td class="ibox"><input id="create_request_password_confirm" type="password" placeholder="Password (Confirm)"></input></td>  </tr>
+            <tr> <td class="ilabel">Email (Optional):  </td> <td class="ibox"><input id="create_request_email"            type="text"     placeholder="Email (Optional)">  </input></td>  </tr>
           </table>
           <div class="spacer" style="height:30px;"></div>
           <div class="button" id="create_request_submit" onclick='submitCreate()'>CREATE ACCOUNT</div>
@@ -356,11 +362,11 @@ function submitReset()
 
       <div class="section" id="change_section">
           <table class="inputs" id="change_inputs">
-            <tr> <td class="ilabel">Username:          </td> <td class="ibox"><input id="change_request_user"                 type='text'>    </input></td> </tr>
-            <tr> <td class="ilabel">Password (Old):    </td> <td class="ibox"><input id="change_request_password_old"         type='password'></input></td> </tr>
-            <tr> <td class="ilabel"> -                 </td> <td class="ibox">                                                                        </td> </tr>
-            <tr> <td class="ilabel">Password (New):    </td> <td class="ibox"><input id="change_request_password_new"         type='password'></input></td> </tr>
-            <tr> <td class="ilabel">Password (Confirm):</td> <td class="ibox"><input id="change_request_password_new_confirm" type='password'></input></td> </tr>
+            <tr> <td class="ilabel">Username:          </td> <td class="ibox"><input id="change_request_user"                 type="text"     placeholder="Username">          </input></td> </tr>
+            <tr> <td class="ilabel">Password (Old):    </td> <td class="ibox"><input id="change_request_password_old"         type="password" placeholder="Password (Old)">    </input></td> </tr>
+            <tr> <td class="ilabel"> -                 </td> <td class="ibox">                                                                                                         </td> </tr>
+            <tr> <td class="ilabel">Password (New):    </td> <td class="ibox"><input id="change_request_password_new"         type="password" placeholder="Password (New)">    </input></td> </tr>
+            <tr> <td class="ilabel">Password (Confirm):</td> <td class="ibox"><input id="change_request_password_new_confirm" type="password" placeholder="Password (Confirm)"></input></td> </tr>
           </table>
           <div class="spacer" style="height:30px;"></div>
           <div class="button" id="change_request_submit" onclick='submitChange()'>CHANGE PASSWORD</div>
@@ -368,9 +374,9 @@ function submitReset()
 
       <div class="section" id="reset_section">
           <table class="inputs" id="reset_inputs">
-            <tr> <td class="ilabel">Username:</td> <td class="ibox"><input id="reset_request_user"  type='text'></input></td> </tr>
-            <tr> <td class="ilabel"> or      </td> <td class="ibox">                                                    </td> </tr>
-            <tr> <td class="ilabel">Email:   </td> <td class="ibox"><input id="reset_request_email" type='text'></input></td> </tr>
+            <tr> <td class="ilabel">Username:</td> <td class="ibox"><input id="reset_request_user"  type="text" placeholder="Username"></input></td> </tr>
+            <tr> <td class="ilabel"> or      </td> <td class="ibox">                                                                           </td> </tr>
+            <tr> <td class="ilabel">Email:   </td> <td class="ibox"><input id="reset_request_email" type="text" placeholder="Email">   </input></td> </tr>
           </table>
           <div class="spacer" style="height:30px;"></div>
           <div class="button" id="reset_request_submit" onclick='submitReset()'>SEND EMAIL</div>
