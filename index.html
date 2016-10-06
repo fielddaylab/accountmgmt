@@ -49,8 +49,6 @@ td
 {
   float:left;
   padding:2px 5px 0px 5px;
-  border-top-left-radius:10px;
-  border-top-right-radius:10px;
 }
 #sections
 {
@@ -113,21 +111,11 @@ function load()
 
 function displaySection(section)
 {
-  document.getElementById("auth_tab").style.borderTop       = "2px solid white";
-  document.getElementById("auth_tab").style.borderLeft      = "2px solid white";
-  document.getElementById("auth_tab").style.borderRight     = "2px solid white";
-  document.getElementById("create_tab").style.borderTop     = "2px solid white";
-  document.getElementById("create_tab").style.borderLeft    = "2px solid white";
-  document.getElementById("create_tab").style.borderRight   = "2px solid white";
-  document.getElementById("change_tab").style.borderTop     = "2px solid white";
-  document.getElementById("change_tab").style.borderLeft    = "2px solid white";
-  document.getElementById("change_tab").style.borderRight   = "2px solid white";
-  document.getElementById("reset_tab").style.borderTop      = "2px solid white";
-  document.getElementById("reset_tab").style.borderLeft     = "2px solid white";
-  document.getElementById("reset_tab").style.borderRight    = "2px solid white";
-  document.getElementById(section+"_tab").style.borderTop   = "2px solid blue";
-  document.getElementById(section+"_tab").style.borderLeft  = "2px solid blue";
-  document.getElementById(section+"_tab").style.borderRight = "2px solid blue";
+  document.getElementById("auth_tab").style.borderBottom      = "4px solid white";
+  document.getElementById("create_tab").style.borderBottom    = "4px solid white";
+  document.getElementById("change_tab").style.borderBottom    = "4px solid white";
+  document.getElementById("reset_tab").style.borderBottom     = "4px solid white";
+  document.getElementById(section+"_tab").style.borderBottom  = "4px solid blue";
 
   document.getElementById("auth_section").style.display     = "none";
   document.getElementById("create_section").style.display   = "none";
