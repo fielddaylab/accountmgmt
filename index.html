@@ -2,7 +2,7 @@
 <head>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:200,300,400,700" rel="stylesheet">
 <style>
-body,div,span,table,tr,td
+body,div,span,input
 {
   margin:0px;
   padding:0px;
@@ -21,9 +21,14 @@ body
 }
 input
 {
+  display:block;
+  margin:0px auto;
+  width:50%;
   border:1px solid blue;
   border-radius:20px;
-  padding:10px;
+  padding:8px;
+  text-align:center;
+  outline: none;
 }
 .spacer
 {
@@ -52,6 +57,15 @@ input
 {
   float:left;
   padding:2px 5px 0px 5px;
+  user-select:none;
+  cursor:pointer;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select:none;
 }
 #sections
 {
@@ -63,19 +77,6 @@ input
   display:none;
   width:100%;
 }
-.inputs
-{
-  width:100%;
-}
-.ilabel
-{
-  width:50%;
-  text-align:right;
-}
-.ibox
-{
-  width:50%;
-}
 .button
 {
   margin:0px auto;
@@ -84,6 +85,14 @@ input
   border:3px solid blue;
   border-radius:20px;
   text-align:center;
+  cursor:pointer;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select:none;
 }
 #alert_container
 {
@@ -100,6 +109,14 @@ input
   border:2px solid blue;
   border-radius:20px;
   margin:0px auto;
+  cursor:pointer;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select:none;
 }
 #alert_txt
 {
@@ -341,43 +358,43 @@ function submitReset()
     <div id="sections">
 
       <div class="section" id="auth_section">
-          <table class="inputs" id="auth_inputs">
-            <tr> <td class="ilabel">Username:</td> <td class="ibox"><input id="auth_request_user"     type="text"     placeholder="Username"></input></td>  </tr>
-            <tr> <td class="ilabel">Password:</td> <td class="ibox"><input id="auth_request_password" type="password" placeholder="Password"></input></td>  </tr>
-          </table>
+          <input id="auth_request_user"     type="text"     placeholder="Username"></input>
+          <div class="spacer" style="height:10px;"></div>
+          <input id="auth_request_password" type="password" placeholder="Password"></input>
           <div class="spacer" style="height:30px;"></div>
           <div class="button" id="auth_request_submit" onclick='submitAuth()'>SIGN IN</div>
       </div>
 
       <div class="section" id="create_section">
-          <table class="inputs" id="create_inputs">
-            <tr> <td class="ilabel">Username:          </td> <td class="ibox"><input id="create_request_user"             type="text"     placeholder="Username">          </input></td>  </tr>
-            <tr> <td class="ilabel">Password:          </td> <td class="ibox"><input id="create_request_password"         type="password" placeholder="Password">          </input></td>  </tr>
-            <tr> <td class="ilabel">Password (Confirm):</td> <td class="ibox"><input id="create_request_password_confirm" type="password" placeholder="Password (Confirm)"></input></td>  </tr>
-            <tr> <td class="ilabel">Email (Optional):  </td> <td class="ibox"><input id="create_request_email"            type="text"     placeholder="Email (Optional)">  </input></td>  </tr>
-          </table>
+          <input id="create_request_user"             type="text"     placeholder="Username">          </input>
+          <div class="spacer" style="height:10px;"></div>
+          <input id="create_request_password"         type="password" placeholder="Password">          </input>
+          <div class="spacer" style="height:10px;"></div>
+          <input id="create_request_password_confirm" type="password" placeholder="Password (Confirm)"></input>
+          <div class="spacer" style="height:10px;"></div>
+          <input id="create_request_email"            type="text"     placeholder="Email (Optional)">  </input>
           <div class="spacer" style="height:30px;"></div>
           <div class="button" id="create_request_submit" onclick='submitCreate()'>CREATE ACCOUNT</div>
       </div>
 
       <div class="section" id="change_section">
-          <table class="inputs" id="change_inputs">
-            <tr> <td class="ilabel">Username:          </td> <td class="ibox"><input id="change_request_user"                 type="text"     placeholder="Username">          </input></td> </tr>
-            <tr> <td class="ilabel">Password (Old):    </td> <td class="ibox"><input id="change_request_password_old"         type="password" placeholder="Password (Old)">    </input></td> </tr>
-            <tr> <td class="ilabel"> -                 </td> <td class="ibox">                                                                                                         </td> </tr>
-            <tr> <td class="ilabel">Password (New):    </td> <td class="ibox"><input id="change_request_password_new"         type="password" placeholder="Password (New)">    </input></td> </tr>
-            <tr> <td class="ilabel">Password (Confirm):</td> <td class="ibox"><input id="change_request_password_new_confirm" type="password" placeholder="Password (Confirm)"></input></td> </tr>
-          </table>
+          <input id="change_request_user"                 type="text"     placeholder="Username">          </input>
+          <div class="spacer" style="height:10px;"></div>
+          <input id="change_request_password_old"         type="password" placeholder="Password (Old)">    </input>
+          <div class="spacer" style="height:30px;"></div>
+          <input id="change_request_password_new"         type="password" placeholder="Password (New)">    </input>
+          <div class="spacer" style="height:10px;"></div>
+          <input id="change_request_password_new_confirm" type="password" placeholder="Password (Confirm)"></input>
           <div class="spacer" style="height:30px;"></div>
           <div class="button" id="change_request_submit" onclick='submitChange()'>CHANGE PASSWORD</div>
       </div>
 
       <div class="section" id="reset_section">
-          <table class="inputs" id="reset_inputs">
-            <tr> <td class="ilabel">Username:</td> <td class="ibox"><input id="reset_request_user"  type="text" placeholder="Username"></input></td> </tr>
-            <tr> <td class="ilabel"> or      </td> <td class="ibox">                                                                           </td> </tr>
-            <tr> <td class="ilabel">Email:   </td> <td class="ibox"><input id="reset_request_email" type="text" placeholder="Email">   </input></td> </tr>
-          </table>
+          <input id="reset_request_user"  type="text" placeholder="Username"></input>
+          <div class="spacer" style="height:5px;"></div>
+          <div style="text-align:center;">or</div>
+          <div class="spacer" style="height:5px;"></div>
+          <input id="reset_request_email" type="text" placeholder="Email">   </input>
           <div class="spacer" style="height:30px;"></div>
           <div class="button" id="reset_request_submit" onclick='submitReset()'>SEND EMAIL</div>
       </div>
