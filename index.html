@@ -2,10 +2,11 @@
 <head>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:200,300,400,700" rel="stylesheet">
 <style>
-body,div,span
+body,div,span,table,tr,td
 {
   margin:0px;
   padding:0px;
+  border:0px;
   color:#444444;
   font:16px Open Sans;
   letter-spacing:1px;
@@ -17,10 +18,6 @@ img
 body
 {
   background-color:#444444;
-}
-td
-{
-  text-align:right;
 }
 .spacer
 {
@@ -58,7 +55,20 @@ td
 .section
 {
   display:none;
-  padding:10px;
+  width:100%;
+}
+.inputs
+{
+  width:100%;
+}
+.ilabel
+{
+  width:50%;
+  text-align:right;
+}
+.ibox
+{
+  width:50%;
 }
 .button
 {
@@ -320,47 +330,47 @@ function submitReset()
       <div class="tab" id="reset_tab"  onclick='displaySection("reset")' > Forgot Password?</div>
     </div>
 
-    <div class="spacer" style="height:70px;"></div>
+    <div class="spacer" style="height:50px;"></div>
 
     <div id="sections">
 
       <div class="section" id="auth_section">
-          <table id="auth_inputs">
-            <tr> <td>Username:</td> <td><input id="auth_request_user"     type='text'>    </input></td>  </tr>
-            <tr> <td>Password:</td> <td><input id="auth_request_password" type='password'></input></td>  </tr>
+          <table class="inputs" id="auth_inputs">
+            <tr> <td class="ilabel">Username:</td> <td class="ibox"><input id="auth_request_user"     type='text'>    </input></td>  </tr>
+            <tr> <td class="ilabel">Password:</td> <td class="ibox"><input id="auth_request_password" type='password'></input></td>  </tr>
           </table>
           <div class="spacer" style="height:30px;"></div>
           <div class="button" id="auth_request_submit" onclick='submitAuth()'>SIGN IN</div>
       </div>
 
       <div class="section" id="create_section">
-          <table id="create_inputs">
-            <tr> <td>Username:          </td> <td><input id="create_request_user"             type='text'>    </input></td>  </tr>
-            <tr> <td>Password:          </td> <td><input id="create_request_password"         type='password'></input></td>  </tr>
-            <tr> <td>Password (Confirm):</td> <td><input id="create_request_password_confirm" type='password'></input></td>  </tr>
-            <tr> <td>Email (Optional):  </td> <td><input id="create_request_email"            type='text'>    </input></td>  </tr>
+          <table class="inputs" id="create_inputs">
+            <tr> <td class="ilabel">Username:          </td> <td class="ibox"><input id="create_request_user"             type='text'>    </input></td>  </tr>
+            <tr> <td class="ilabel">Password:          </td> <td class="ibox"><input id="create_request_password"         type='password'></input></td>  </tr>
+            <tr> <td class="ilabel">Password (Confirm):</td> <td class="ibox"><input id="create_request_password_confirm" type='password'></input></td>  </tr>
+            <tr> <td class="ilabel">Email (Optional):  </td> <td class="ibox"><input id="create_request_email"            type='text'>    </input></td>  </tr>
           </table>
           <div class="spacer" style="height:30px;"></div>
           <div class="button" id="create_request_submit" onclick='submitCreate()'>CREATE ACCOUNT</div>
       </div>
 
       <div class="section" id="change_section">
-          <table id="change_inputs">
-            <tr> <td>Username:          </td> <td><input id="change_request_user"                 type='text'>    </input></td> </tr>
-            <tr> <td>Password (Old):    </td> <td><input id="change_request_password_old"         type='password'></input></td> </tr>
-            <tr> <td> -                 </td> <td>                                                                        </td> </tr>
-            <tr> <td>Password (New):    </td> <td><input id="change_request_password_new"         type='password'></input></td> </tr>
-            <tr> <td>Password (Confirm):</td> <td><input id="change_request_password_new_confirm" type='password'></input></td> </tr>
+          <table class="inputs" id="change_inputs">
+            <tr> <td class="ilabel">Username:          </td> <td class="ibox"><input id="change_request_user"                 type='text'>    </input></td> </tr>
+            <tr> <td class="ilabel">Password (Old):    </td> <td class="ibox"><input id="change_request_password_old"         type='password'></input></td> </tr>
+            <tr> <td class="ilabel"> -                 </td> <td class="ibox">                                                                        </td> </tr>
+            <tr> <td class="ilabel">Password (New):    </td> <td class="ibox"><input id="change_request_password_new"         type='password'></input></td> </tr>
+            <tr> <td class="ilabel">Password (Confirm):</td> <td class="ibox"><input id="change_request_password_new_confirm" type='password'></input></td> </tr>
           </table>
           <div class="spacer" style="height:30px;"></div>
           <div class="button" id="change_request_submit" onclick='submitChange()'>CHANGE PASSWORD</div>
       </div>
 
       <div class="section" id="reset_section">
-          <table id="reset_inputs">
-            <tr> <td>Username:</td> <td><input id="reset_request_user"  type='text'></input></td> </tr>
-            <tr> <td> or      </td> <td>                                                     </td> </tr>
-            <tr> <td>Email:   </td> <td><input id="reset_request_email" type='text'></input></td> </tr>
+          <table class="inputs" id="reset_inputs">
+            <tr> <td class="ilabel">Username:</td> <td class="ibox"><input id="reset_request_user"  type='text'></input></td> </tr>
+            <tr> <td class="ilabel"> or      </td> <td class="ibox">                                                    </td> </tr>
+            <tr> <td class="ilabel">Email:   </td> <td class="ibox"><input id="reset_request_email" type='text'></input></td> </tr>
           </table>
           <div class="spacer" style="height:30px;"></div>
           <div class="button" id="reset_request_submit" onclick='submitReset()'>SEND EMAIL</div>
