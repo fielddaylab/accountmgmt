@@ -29,7 +29,7 @@ td
 #middle_bar
 {
   margin:0px auto;
-  width:500px;
+  width:700px;
   height:100%;
   background-color:white;
 }
@@ -107,6 +107,10 @@ function load()
     document.getElementById('auth_request_password').value = params.password;
     submitAuth();
   }
+  if(params.action == "auth") displaySection("auth");
+  if(params.action == "create") displaySection("create");
+  if(params.action == "change") displaySection("change");
+  if(params.action == "reset") displaySection("reset");
 }
 
 function displaySection(section)
