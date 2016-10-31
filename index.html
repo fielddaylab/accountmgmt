@@ -277,7 +277,7 @@ function submitReset()
   var email_valid = false;
 
   if(username.length > 3 && username.match(/^[A-Za-z0-9_]*$/)           ) username_valid = true;
-  if(email.length    > 3 && email.match(/^[A-Za-z0-9_]*@[A-Za-z0-9_]*$/)) email_valid    = true; //incredibly basic email verification
+  if(email.length    > 3 && email.match(/^[A-Za-z0-9_]*@[A-Za-z0-9_\.]*$/)) email_valid    = true; //incredibly basic email verification
 
   if(username.length > 0 && !username_valid)
   { displayAlert("Enter a valid username."); return; }
