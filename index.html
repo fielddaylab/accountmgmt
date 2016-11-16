@@ -136,6 +136,15 @@ function load()
 {
   displaySection("create");
   var params = parseURLParams(document.URL);
+  if(params.i)
+  {
+    displaySection("forgot");
+    document.getElementById("forgot_tab").style.display = "block";
+    document.getElementById("auth_tab").style.display   = "none";
+    document.getElementById("create_tab").style.display = "none";
+    document.getElementById("change_tab").style.display = "none";
+    document.getElementById("reset_tab").style.display  = "none";
+  }
   if(params.action == "auth")   displaySection("auth");
   if(params.action == "create") displaySection("create");
   if(params.action == "change") displaySection("change");
@@ -144,12 +153,14 @@ function load()
 
 function displaySection(section)
 {
+  document.getElementById("forgot_tab").style.borderBottom    = "4px solid white";
   document.getElementById("auth_tab").style.borderBottom      = "4px solid white";
   document.getElementById("create_tab").style.borderBottom    = "4px solid white";
   document.getElementById("change_tab").style.borderBottom    = "4px solid white";
   document.getElementById("reset_tab").style.borderBottom     = "4px solid white";
   document.getElementById(section+"_tab").style.borderBottom  = "4px solid blue";
 
+  document.getElementById("forgot_section").style.display   = "none";
   document.getElementById("auth_section").style.display     = "none";
   document.getElementById("create_section").style.display   = "none";
   document.getElementById("change_section").style.display   = "none";
@@ -295,36 +306,28 @@ function submitReset()
   else                    displayAlert("If an account exists with these credentials, an email has been sent to its corresponding address with the next steps.");
 }
 
+function submitForgot()
+{
+  var p = parseURLParams(document.URL);
 
-/* NEEDS INTEGRATION
-   function submitFix()
-   {
-   var p = parseURLParams(window.location.href);
-   var p1 = document.getElementById('p1').value;
-   var p2 = document.getElementById('p2').value;
-   if(p1 != p2) {
-   errorAlert("Passwords do not match.");
-   return;
-   }
+  var password_new         = document.getElementById('forgot_request_password_new').value;
+  var password_new_confirm = document.getElementById('forgot_request_password_new_confirm').value;
 
-   if(p1 === "") {
-   warningAlert("Password can't be blank.");
-   return;
-   }
+  if(password.length < 3)
+  { displayAlert("Please enter a valid password."); return; }
 
-   var response = sendRequest('v2.users.fixPassword', {"user_id":p.i[0],"junk":p.j[0],"new_password":p1}, "POST");
-   console.log(response);
-   document.getElementById("content-area").innerHTML = "<h4>Your password was reset! Close this window and head back to ARIS to log in.</h4>";
-   }
+  if(password_new.length < 3)
+  { displayAlert("Please enter a valid password."); return; }
+  if(password_new != password_new_confirm)
+  { displayAlert("Passwords don't match."); return; }
 
-   function errorAlert(message) {
-   document.getElementById('alert-box').innerHTML = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-remove'></span> "+message+"</div>"
-   }
+  var package = {"user_id":p.i[0],"junk":p.j[0],"new_password":password_new};
+  var response = sendRequest('users.fixPassword', JSON.stringify(package), "POST");
+  console.log(response);
+  if(response.returnCode) displayAlert("Something went wrong: "+response.returnCodeDescription);
+  else                    displayAlert("Password successfully changed!");
+}
 
-   function warningAlert(message) {
-   document.getElementById('alert-box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='glyphicon glyphicon-question-sign'></span> "+message+"</div>"
-   }
- */
 </script>
 </head>
 <body onload="load()">
@@ -343,6 +346,7 @@ function submitReset()
     <div class="spacer" style="height:30px;"></div>
 
     <div id="tabs">
+      <div style="display:none;" class="tab" id="forgot_tab" onclick='displaySection("forgot")'> Forgot Password </div>
       <div style="display:none;" class="tab" id="auth_tab"   onclick='displaySection("auth")'  > Confirm Account </div>
       <div class="tab" id="create_tab" onclick='displaySection("create")'> Create Account  </div>
       <div class="tab" id="change_tab" onclick='displaySection("change")'> Change Password </div>
@@ -352,6 +356,14 @@ function submitReset()
     <div class="spacer" style="height:50px;"></div>
 
     <div id="sections">
+
+      <div class="section" id="forgot_section">
+          <input id="forgot_request_password"         type="password" placeholder="Password">          </input>
+          <div class="spacer" style="height:10px;"></div>
+          <input id="forgot_request_password_confirm" type="password" placeholder="Password (Confirm)"></input>
+          <div class="spacer" style="height:30px;"></div>
+          <div class="button" id="forgot_request_submit" onclick='submitForgot()'>FORGOT PASSWORD</div>
+      </div>
 
       <div class="section" id="auth_section">
           <input id="auth_request_user"     type="text"     placeholder="Username"></input>
@@ -396,6 +408,8 @@ function submitReset()
       </div>
 
     </div>
+
+    <div class="spacer" style="height:30px;"></div>
 
   </div>
 
