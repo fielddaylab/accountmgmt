@@ -310,8 +310,8 @@ function submitForgot()
 {
   var p = parseURLParams(document.URL);
 
-  var password_new         = document.getElementById('forgot_request_password_new').value;
-  var password_new_confirm = document.getElementById('forgot_request_password_new_confirm').value;
+  var password_new         = document.getElementById('forgot_request_password').value;
+  var password_new_confirm = document.getElementById('forgot_request_password_confirm').value;
 
   if(password.length < 3)
   { displayAlert("Please enter a valid password."); return; }
