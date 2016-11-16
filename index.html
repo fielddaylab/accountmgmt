@@ -145,20 +145,34 @@ function load()
     document.getElementById("change_tab").style.display = "none";
     document.getElementById("reset_tab").style.display  = "none";
   }
-  if(params.action == "auth")   displaySection("auth");
-  if(params.action == "create") displaySection("create");
-  if(params.action == "change") displaySection("change");
-  if(params.action == "reset")  displaySection("reset");
+  else if(params.message)
+  {
+    document.getElementById("forgot_section").style.display = "none";
+    document.getElementById("auth_section").style.display   = "none";
+    document.getElementById("create_section").style.display = "none";
+    document.getElementById("change_section").style.display = "none";
+    document.getElementById("reset_section").style.display  = "none";
+    document.getElementById("forgot_tab").style.display = "none";
+    document.getElementById("auth_tab").style.display   = "none";
+    document.getElementById("create_tab").style.display = "none";
+    document.getElementById("change_tab").style.display = "none";
+    document.getElementById("reset_tab").style.display  = "none";
+    displayAlert(params.message);
+  }
+  else if(params.action == "auth")   displaySection("auth");
+  else if(params.action == "create") displaySection("create");
+  else if(params.action == "change") displaySection("change");
+  else if(params.action == "reset")  displaySection("reset");
 }
 
 function displaySection(section)
 {
-  document.getElementById("forgot_tab").style.borderBottom    = "4px solid white";
-  document.getElementById("auth_tab").style.borderBottom      = "4px solid white";
-  document.getElementById("create_tab").style.borderBottom    = "4px solid white";
-  document.getElementById("change_tab").style.borderBottom    = "4px solid white";
-  document.getElementById("reset_tab").style.borderBottom     = "4px solid white";
-  document.getElementById(section+"_tab").style.borderBottom  = "4px solid blue";
+  document.getElementById("forgot_tab").style.borderBottom   = "4px solid white";
+  document.getElementById("auth_tab").style.borderBottom     = "4px solid white";
+  document.getElementById("create_tab").style.borderBottom   = "4px solid white";
+  document.getElementById("change_tab").style.borderBottom   = "4px solid white";
+  document.getElementById("reset_tab").style.borderBottom    = "4px solid white";
+  document.getElementById(section+"_tab").style.borderBottom = "4px solid blue";
 
   document.getElementById("forgot_section").style.display   = "none";
   document.getElementById("auth_section").style.display     = "none";
@@ -168,10 +182,20 @@ function displaySection(section)
   document.getElementById(section+"_section").style.display = "block";
 }
 
-function displayAlert(txt)
+function displayAlert(txt,new_page)
 {
-  document.getElementById("alert_txt").innerHTML = txt;
-  document.getElementById("alert_container").style.display = "block";
+  if(!new_page)
+  {
+    document.getElementById("alert_txt").innerHTML = txt;
+    document.getElementById("alert_container").style.display = "block";
+  }
+  else
+  {
+    var cur_url = document.URL;
+    var query_start = cur_url.indexOf("?") + 1 || cur_url.length + 1;
+    var base_url = cur_url.slice(0,query_start-1);
+    window.location.href = base_url+"?message="+encodeURIComponent(txt);
+  }
 }
 function dismissAlert()
 {
@@ -181,9 +205,9 @@ function dismissAlert()
 
 function parseURLParams(url)
 {
-  var queryStart = url.indexOf("?") + 1;
-  var queryEnd   = url.indexOf("#") + 1 || url.length + 1;
-  var query      = url.slice(queryStart, queryEnd - 1);
+  var query_start = url.indexOf("?") + 1 || url.length + 1;
+  var query_end   = url.indexOf("#") + 1 || url.length + 1;
+  var query       = url.slice(query_start, query_end - 1);
 
   var params  = {};
   if (query === url || query === "") return params;
@@ -227,7 +251,7 @@ function submitAuth()
   var response = sendRequest('users.logIn', JSON.stringify(package), "POST");
   console.log(response);
   if(response.returnCode) displayAlert("Either the user does not exist, or you have entered the wrong password.");
-  else                    displayAlert("User account "+username+" confirmed!");
+  else                    displayAlert("User account "+username+" confirmed!",true);
 }
 
 function submitCreate()
@@ -249,8 +273,8 @@ function submitCreate()
   var package = {"user_name":username,"password":password,"email":email};
   var response = sendRequest('users.createUser', JSON.stringify(package), "POST");
   console.log(response);
-  if(response.returnCode) displayAlert("Something went wrong: "+response.returnCodeDescription);
-  else                    displayAlert("User account "+username+" created!");
+  if(response.returnCode) displayAlert("Something went wrong: "+response.returnCodeDescription,true);
+  else                    displayAlert("User account "+username+" created!",true);
 }
 
 function submitChange()
@@ -275,8 +299,8 @@ function submitChange()
   var package = {"user_name":username,"old_password":password,"new_password":password_new};
   var response = sendRequest('users.changePassword', JSON.stringify(package), "POST");
   console.log(response);
-  if(response.returnCode) displayAlert("Something went wrong: "+response.returnCodeDescription);
-  else                    displayAlert("Password successfully changed!");
+  if(response.returnCode) displayAlert("Something went wrong: "+response.returnCodeDescription,true);
+  else                    displayAlert("Password successfully changed!",true);
 }
 
 function submitReset()
@@ -302,8 +326,8 @@ function submitReset()
   if(email_valid)    package = {"user_name":"","email":email};
   var response = sendRequest('users.requestForgotPasswordEmail', JSON.stringify(package), "POST");
   console.log(response);
-  if(response.returnCode) displayAlert("Something went wrong: "+response.returnCodeDescription);
-  else                    displayAlert("If an account exists with these credentials, an email has been sent to its corresponding address with the next steps.");
+  if(response.returnCode) displayAlert("Something went wrong: "+response.returnCodeDescription,true);
+  else                    displayAlert("If an account exists with these credentials, an email has been sent to its corresponding address with the next steps.",true);
 }
 
 function submitForgot()
@@ -324,8 +348,8 @@ function submitForgot()
   var package = {"user_id":p.i[0],"junk":p.j[0],"new_password":password_new};
   var response = sendRequest('users.fixPassword', JSON.stringify(package), "POST");
   console.log(response);
-  if(response.returnCode) displayAlert("Something went wrong: "+response.returnCodeDescription);
-  else                    displayAlert("Password successfully changed!");
+  if(response.returnCode) displayAlert("Something went wrong: "+response.returnCodeDescription,true);
+  else                    displayAlert("Password successfully changed!",true);
 }
 
 </script>
